@@ -1,0 +1,5 @@
+---
+
+maxscale_deb: "https://downloads.mariadb.com/enterprise/kbha-2yfb/mariadb-maxscale/1.2/debian/dists/{{ ansible_distribution }}/main/binary-amd64/maxscale-1.2.0-x86_64-deb_wheezy.deb"
+maxscale_owner: 'maxscale'
+maxscale_group: 'maxscale'

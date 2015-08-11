@@ -1,0 +1,14 @@
+#
+# {{ ansible_managed }}
+#
+
+{{ maxscale_logdir }}/*.log {
+	monthly
+	rotate 5
+	missingok
+	nocompress
+	sharedscripts
+	postrotate
+		kill -USR1 `cat /var/run/maxscale/maxscale.pid` 
+	endscript
+}

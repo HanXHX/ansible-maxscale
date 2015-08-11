@@ -1,0 +1,43 @@
+---
+
+maxscale_threads: 4
+maxscale_log_messages: 1
+maxscale_log_trace: 0
+maxscale_log_debug: 0
+maxscale_logdir: '/var/log/maxscale'
+maxscale_cachedir: '/var/cache/maxscale'
+maxscale_piddir: '/var/run/maxscale'
+#maxscale_language
+
+maxscale_servers: []
+# Example:
+# maxscale_servers:
+#   - name: 'myserver1'
+#     address: '10.0.0.1'
+#     port: '3306'
+#     protocol: 'MySQLBackend'
+#     serv_weight: 1
+#     monitoruser: 'maxscale' # Overwrite global settings
+#     monitorpw: 'secure_password' # Overwrite global settings
+
+
+maxscale_rw_routers: []
+  #  - name: 
+  #    servers:
+  #      - 'server1'
+  #      - 'server2'
+  #    user: 'maxscale'
+  #    passwd: 'password'
+  #
+  #
+
+
+# CLI Listener
+maxscale_cli_listener: true
+maxscale_cli_listener_address: '127.0.0.1'
+maxscale_cli_listener_port: 6603
+
+# Debug Listener
+maxscale_debug_listener: true
+maxscale_debug_listener_address: '0.0.0.0'
+maxscale_debug_listener_port: 4442

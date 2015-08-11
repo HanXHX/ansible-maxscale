@@ -1,0 +1,41 @@
+---
+
+- name: GET_URL | Get deb package to configure MariaDB repository
+  get_url: >
+    url=https://downloads.mariadb.com/enterprise/kbha-2yfb/generate/10.0/mariadb-enterprise-repository.deb
+    dest=/tmp/mariadb-enterprise-repository.deb
+    force=no
+  register: getdeb
+
+- name: APT | Add MariaDB APT repository
+  apt: deb=/tmp/mariadb-enterprise-repository.deb
+
+- name: APT | Update cache 
+  apt: update_cache=yes
+  when: getdeb.changed
+
+- name: APT | Install Maxscale
+  apt: pkg=maxscale state=present
+
+- name: TEMPLATE | Deploy maxcale configuration
+  template: >
+    src=etc/maxscale.cnf.j2
+    dest=/etc/maxscale.cnf
+    mode=0640
+  notify: restart maxscale
+
+- name: TEMPLATE | Prepare logrotate    
+  template: >
+    src=etc/logrotate.d/maxscale.j2
+    dest=/etc/logrotate.d/maxscale
+
+- name: FILE | Create cache directory
+  file: >
+    path={{ maxscale_cachedir }}
+    owner={{ maxscale_owner }}
+    group={{ maxscale_group }}
+    mode=0755
+    state=directory
+
+- name: SERVICE | Ensure Maxscale is started
+  service: name=maxscale state=started

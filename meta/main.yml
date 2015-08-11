@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  author: Emilien Mantel
+  description: Install and manage MariaDB Maxscale for Debian 
+  company:
+  license: GPLv2
+  min_ansible_version: 1.2
+  platforms:
+  - name: Debian
+    versions:
+    - wheezy
+  categories:
+  - clustering
+  - database:sql
+  - monitoring
+  - packaging
+dependencies: []
+ 

@@ -1,0 +1,54 @@
+---
+
+- hosts: all
+  pre_tasks:
+    - local_action: shell ssh-add $HOME/.vagrant.d/insecure_private_key
+      become: no
+      changed_when: false
+  tasks:
+    - apt: pkg={{ item }} state=present update_cache=yes cache_valid_time=3600
+      with_items:
+        - strace
+        - vim
+    - lineinfile: >
+        line='syntax on'
+        dest=/root/.vimrc
+        create=yes
+    - get_url: >
+        url=https://raw.githubusercontent.com/HanXHX/ansible-debian-bootstrap/master/files/bashrc
+        dest=/root/.bashrc
+        force=yes
+
+- hosts: master
+  roles:
+    - HanXHX.mysql
+  tasks:
+    - copy: src=import.sql dest=/tmp/import.sql
+      register: c
+    - mysql_db: name={{ item }} state=import target=/tmp/import.sql
+      with_items: ['testrepl', 'norepl']
+      when: c.changed
+
+
+- hosts: slave
+  roles:
+    - HanXHX.mysql 
+
+- hosts: maxscale
+  vars:
+    - maxscale_servers:
+       - name: 'themaster'
+         address: '192.168.201.12'
+       - name: 'theslave'
+         address: '192.168.201.13'
+    - maxscale_rwsplit_routers:
+        - name: 'Vagrant_rw_router'
+          servers:
+            - 'themaster'
+            - 'theslave'
+          user: 'maxscale'
+          passwd: '1a2b3c'
+          max_slave_connections: '100%'
+          port: 17001
+  roles:
+    - ../../

@@ -1,0 +1,7 @@
+---
+
+- name: reload maxscale
+  service: name=maxscale state=reloaded
+
+- name: restart maxscale
+  service: name=maxscale state=restarted
