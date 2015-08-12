@@ -49,6 +49,7 @@
           user: 'maxscale'
           passwd: '1a2b3c'
           max_slave_connections: '100%'
-          port: 17001
+          listener_port: '17001'
+          router.detect_replication_lag: '1'
   roles:
     - ../../
