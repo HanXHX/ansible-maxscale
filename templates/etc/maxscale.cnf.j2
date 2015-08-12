@@ -243,6 +243,9 @@ use_sql_variables_in={{ router.use_sql_variables_in | default('master') }}
 {% if router.filters is defined %}
 filters={{ router.filters }}
 {% endif %}
+{% if router.version_string is defined %}
+version_string={{ router.version_string }}
+{% endif %}
 #filters=hint|fetch|qla
 
 

@@ -51,5 +51,6 @@
           max_slave_connections: '100%'
           listener_port: '17001'
           router.detect_replication_lag: '1'
+          version_string: 'MariaDB Maxscale 1.2 - Vagrant_rw_router'
   roles:
     - ../../
