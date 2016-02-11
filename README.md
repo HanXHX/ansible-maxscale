@@ -1,38 +1,87 @@
-Role Name
-=========
+MariaDB Maxscale Ansible role
+=============================
 
-A brief description of the role goes here.
+Install and configure MariaDB Maxscale for Debian Jessie.
+
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+None.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+### Global
+
+- `maxscale_threads`:
+- `maxscale_log_messages`:
+- `maxscale_log_trace`:
+- `maxscale_log_debug`:
+- `maxscale_logdir`:
+- `maxscale_cachedir`:
+- `maxscale_piddir`:
+
+### Servers
+
+- `maxscale_servers`:
+
+Example:
+
+```
+maxscale_servers:
+  - name: 'myserver1'
+    address: '10.0.0.1'
+    port: '3306'
+    protocol: 'MySQLBackend'
+    serv_weight: 1
+    monitoruser: 'maxscale' # Overwrite global settings
+    monitorpw: 'secure_password' # Overwrite global settings
+```
+
+### Routers
+
+- `maxscale_rw_routers`:
+
+Example:
+
+```
+maxscale_rw_routers:
+  - name: 
+    servers:
+      - 'server1'
+      - 'server2'
+    user: 'maxscale'
+    passwd: 'password'
+```
+
+### Listeners
+
+- `maxscale_cli_listener`:
+- `maxscale_cli_listener_address`:
+- `maxscale_cli_listener_port`:
+- `maxscale_debug_listener`:
+- `maxscale_debug_listener_address`:
+- `maxscale_debug_listener_port`:
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+None.
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
+    - hosts: maxscale
       roles:
-         - { role: username.rolename, x: 42 }
+         - { role: HanXHX.maxscale }
 
 License
 -------
 
-BSD
+GPLv2
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+- Twitter: [@hanxhx_](https://twitter.com/hanxhx_)
