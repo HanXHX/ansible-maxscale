@@ -7,13 +7,14 @@ Install and configure MariaDB Maxscale for Debian Jessie.
 Requirements
 ------------
 
-None.
+I have many issues with systemd. You can use my [bootstrap role](https://github.com/HanXHX/ansible-debian-bootstrap) for removing systemd on your system.
 
 Role Variables
 --------------
 
 ### Global
 
+- `maxscale_version`:
 - `maxscale_threads`:
 - `maxscale_log_messages`:
 - `maxscale_log_trace`:

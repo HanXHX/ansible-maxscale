@@ -6,9 +6,9 @@
 Vagrant.configure("2") do |config|
 
 	vms = [
-		["wheezy-upstream-mariadb-master", "deb/wheezy-amd64", "192.168.201.12", ["wheezy","upstream","mariadb","master"]],
-		["wheezy-upstream-mariadb-slave", "deb/wheezy-amd64", "192.168.201.13", ["wheezy","upstream","mariadb","slave"]],
-		["wheezy-maxscale", "deb/wheezy-amd64", "192.168.201.200", ["maxscale"]]
+		["jessie-upstream-mariadb-master", "debian/jessie64", "192.168.201.12", ["jessie","upstream","mariadb","master"]],
+		["jessie-upstream-mariadb-slave",  "debian/jessie64", "192.168.201.13", ["jessie","upstream","mariadb","slave"]],
+		["jessie-maxscale", "debian/jessie64", "192.168.201.200", ["maxscale"]]
 	]
 
 	config.vm.provider "virtualbox" do |v|

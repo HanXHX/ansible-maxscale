@@ -1,21 +1,17 @@
 ---
 
-- name: GET_URL | Get deb package to configure MariaDB repository
-  get_url: >
-    url=https://downloads.mariadb.com/enterprise/kbha-2yfb/generate/10.0/mariadb-enterprise-repository.deb
-    dest=/tmp/mariadb-enterprise-repository.deb
-    force=no
-  register: getdeb
+- name: ASSERT | Check Maxscale version
+  assert:
+    that:
+      - "maxscale_version in maxscale_available_version"
+      - "ansible_service_mgr == 'sysvinit'"
 
-- name: APT | Add MariaDB APT repository
-  apt: deb=/tmp/mariadb-enterprise-repository.deb
+- name: INCLUDE | Install
+  include: install.yml
 
-- name: APT | Update cache 
-  apt: update_cache=yes
-  when: getdeb.changed
-
-- name: APT | Install Maxscale
-  apt: pkg=maxscale state=present
+- name: INCLUDE | Fix systemd
+  include: fix-systemd.yml
+  when: ansible_service_mgr == 'systemd'
 
 - name: TEMPLATE | Deploy maxcale configuration
   template: >
@@ -24,7 +20,7 @@
     mode=0640
   notify: restart maxscale
 
-- name: TEMPLATE | Prepare logrotate    
+- name: TEMPLATE | Prepare logrotate
   template: >
     src=etc/logrotate.d/maxscale.j2
     dest=/etc/logrotate.d/maxscale
@@ -37,5 +33,5 @@
     mode=0755
     state=directory
 
-- name: SERVICE | Ensure Maxscale is started
-  service: name=maxscale state=started
+- name: SERVICE | Ensure Maxscale is enabled and started
+  service: name=maxscale state=started enabled=yes

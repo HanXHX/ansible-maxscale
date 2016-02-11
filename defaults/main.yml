@@ -1,5 +1,6 @@
 ---
 
+maxscale_version: 'latest'
 maxscale_threads: 4
 maxscale_log_messages: 1
 maxscale_log_trace: 0

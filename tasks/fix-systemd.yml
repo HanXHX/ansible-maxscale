@@ -1,0 +1,23 @@
+- name: STAT | Check systemd service exists
+  stat: path=/lib/systemd/system/maxscale.service
+  register: sd
+
+- block:
+
+  - name: FILE | Chmod -x systemd service (fix file mode)
+    file: >
+      path=/lib/systemd/system/maxscale.service
+      mode=0644
+
+  - name: LINEINFILE | Remove unmanaged system configuration
+    lineinfile: >
+      dest=/lib/systemd/system/maxscale.service
+      regexp="^TimeOutStartSec"
+      state=absent
+    register: l
+
+  - name: COMMAND | Reload systemd configuration
+    command: systemctl daemon-reload
+    when: l.changed
+
+  when: sd.stat.exists
