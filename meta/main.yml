@@ -4,15 +4,18 @@ galaxy_info:
   description: Install and manage MariaDB Maxscale for Debian 
   company:
   license: GPLv2
-  min_ansible_version: 1.2
+  min_ansible_version: 1.9
   platforms:
   - name: Debian
     versions:
-    - wheezy
-  categories:
+    - jessie
+  galaxy_tags:
   - clustering
   - database:sql
   - monitoring
   - packaging
+  - mysql
+  - mariadb
+  - replication
 dependencies: []
  
