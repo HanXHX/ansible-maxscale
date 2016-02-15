@@ -12,11 +12,11 @@ mysql_databases:
 mysql_users:
   - name: 'replication'
     password: '1a2b3c'
-    priv: '*.*:"REPLICATION SLAVE"'
+    priv: '*.*:REPLICATION SLAVE'
     host: '%'
   - name: 'maxscale'
     password: '1a2b3c'
-    priv: '*.*:"REPLICATION SLAVE","REPLICATION CLIENT","SHOW DATABASES"/mysql.user:SELECT/mysql.db:SELECT'
+    priv: '*.*:REPLICATION SLAVE,REPLICATION CLIENT,SHOW DATABASES/mysql.user:SELECT/mysql.db:SELECT'
     host: '%'
   - name: 'rw'
     password: 'rw'
