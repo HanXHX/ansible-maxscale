@@ -11,25 +11,8 @@ maxscale_piddir: '/var/run/maxscale'
 #maxscale_language
 
 maxscale_servers: []
-# Example:
-# maxscale_servers:
-#   - name: 'myserver1'
-#     address: '10.0.0.1'
-#     port: '3306'
-#     protocol: 'MySQLBackend'
-#     serv_weight: 1
-#     monitoruser: 'maxscale' # Overwrite global settings
-#     monitorpw: 'secure_password' # Overwrite global settings
-
-maxscale_rw_routers: []
-  #  - name: 
-  #    servers:
-  #      - 'server1'
-  #      - 'server2'
-  #    user: 'maxscale'
-  #    passwd: 'password'
-  #
-  #
+maxscale_services: []
+maxscale_listeners: []
 maxscale_monitors: []
 
 # CLI Listener

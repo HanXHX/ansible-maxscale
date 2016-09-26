@@ -17,5 +17,7 @@ galaxy_info:
   - mysql
   - mariadb
   - replication
+  - maxscale
+  - proxy
 dependencies: []
  
