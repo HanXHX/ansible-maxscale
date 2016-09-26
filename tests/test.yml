@@ -1,41 +1,6 @@
 ---
 
 - hosts: all
-  pre_tasks:
-    - local_action: shell ssh-add $HOME/.vagrant.d/insecure_private_key
-      become: no
-      changed_when: false
-  tasks:
-    - apt: pkg={{ item }} state=present update_cache=yes cache_valid_time=3600
-      with_items:
-        - strace
-        - vim
-    - lineinfile: >
-        line='syntax on'
-        dest=/root/.vimrc
-        create=yes
-    - get_url: >
-        url=https://raw.githubusercontent.com/HanXHX/ansible-debian-bootstrap/master/files/bashrc
-        dest=/root/.bashrc
-        force=yes
-
-#- hosts: master
-#  roles:
-#    - HanXHX.mysql
-#  tasks:
-#    - copy: src=import.sql dest=/tmp/import.sql
-#      register: c
-#    - mysql_db: name={{ item }} state=import target=/tmp/import.sql
-#      with_items: ['testrepl', 'norepl']
-#      when: c.changed
-#
-#
-#- hosts: slave
-#  roles:
-#    - HanXHX.mysql 
-#
-#
-- hosts: maxscale
   vars:
     maxscale_log_notice: 1
     maxscale_log_info: 1
@@ -49,13 +14,13 @@
         address: '192.168.201.13'
     maxscale_services:
       readme:
-        router: 'readconnroute' 
+        router: 'readconnroute'
         servers: 'me'
         router_options: 'running'
         user: 'maxscale'
         passwd: '1a2b3c'
       writme:
-        router: 'readwritesplit' 
+        router: 'readwritesplit'
         servers: 'me'
         user: 'maxscale'
         passwd: '1a2b3c'
@@ -76,3 +41,7 @@
   roles:
     - mariadb
     - ../../
+  post_tasks:
+    - name: TEST ---- maxadmin
+      command: maxadmin 'list listeners'
+      changed_when: false
