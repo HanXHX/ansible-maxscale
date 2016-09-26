@@ -1,0 +1,5 @@
+---
+
+mariadb_version: '10.1'
+mariadb_repository: "http://ftp.igh.cnrs.fr/pub/mariadb/repo/{{ mariadb_version }}/debian"
+mysql_root_password: '1a2b3c'

@@ -1,15 +1,20 @@
 ---
 
-- name: APT_KEY | Add MariaDB GPG key
-  apt_key: >
-    url=http://downloads.mariadb.com/enterprise/kbha-2yfb/mariadb-maxscale/MariaDB-MaxScale-GPG-KEY
-    state=present
+#- name: APT_KEY | Add MariaDB GPG key
+#  apt_key: >
+#    url=http://downloads.mariadb.com/enterprise/kbha-2yfb/mariadb-maxscale/MariaDB-MaxScale-GPG-KEY
+#    state=present
+#
+#- name: APT_REPOSITORY | Add MariaDB Maxscale repo
+#  apt_repository: >
+#    repo='deb http://downloads.mariadb.com/enterprise/kbha-2yfb/mariadb-maxscale/{{ maxscale_version }}/debian {{ ansible_distribution_release }} main'
+#    state=present
+#
+#- name: APT | Install Maxscale
+#  apt: pkg=maxscale state=present update_cache=yes cache_valid_time=3600
 
-- name: APT_REPOSITORY | Add MariaDB Maxscale repo
-  apt_repository: >
-    repo='deb http://downloads.mariadb.com/enterprise/kbha-2yfb/mariadb-maxscale/{{ maxscale_version }}/debian {{ ansible_distribution_release }} main'
-    state=present
-
-- name: APT | Install Maxscale
-  apt: pkg=maxscale state=present update_cache=yes cache_valid_time=3600
-
+- name: APT | Install Maxscale from deb package
+  apt: >
+    deb=https://downloads.mariadb.com/MaxScale/2.0.0/debian/dists/jessie/main/binary-amd64/maxscale-beta-2.0.0-1.debian.jessie.x86_64.deb
+    update_cache=yes
+    cache_valid_time=3600

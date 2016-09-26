@@ -19,38 +19,60 @@
         dest=/root/.bashrc
         force=yes
 
-- hosts: master
-  roles:
-    - HanXHX.mysql
-  tasks:
-    - copy: src=import.sql dest=/tmp/import.sql
-      register: c
-    - mysql_db: name={{ item }} state=import target=/tmp/import.sql
-      with_items: ['testrepl', 'norepl']
-      when: c.changed
-
-
-- hosts: slave
-  roles:
-    - HanXHX.mysql 
-
+#- hosts: master
+#  roles:
+#    - HanXHX.mysql
+#  tasks:
+#    - copy: src=import.sql dest=/tmp/import.sql
+#      register: c
+#    - mysql_db: name={{ item }} state=import target=/tmp/import.sql
+#      with_items: ['testrepl', 'norepl']
+#      when: c.changed
+#
+#
+#- hosts: slave
+#  roles:
+#    - HanXHX.mysql 
+#
+#
 - hosts: maxscale
   vars:
-    - maxscale_servers:
-       - name: 'themaster'
-         address: '192.168.201.12'
-       - name: 'theslave'
-         address: '192.168.201.13'
-    - maxscale_rwsplit_routers:
-        - name: 'Vagrant_rw_router'
-          servers:
-            - 'themaster'
-            - 'theslave'
-          user: 'maxscale'
-          passwd: '1a2b3c'
-          max_slave_connections: '100%'
-          listener_port: '17001'
-          router.detect_replication_lag: '1'
-          version_string: 'MariaDB Maxscale 1.2 - Vagrant_rw_router'
+    maxscale_log_notice: 1
+    maxscale_log_info: 1
+    maxscale_log_debug: 1
+    maxscale_servers:
+      - name: 'me'
+        address: '127.0.0.1'
+      - name: 'themaster'
+        address: '192.168.201.12'
+      - name: 'theslave'
+        address: '192.168.201.13'
+    maxscale_services:
+      readme:
+        router: 'readconnroute' 
+        servers: 'me'
+        router_options: 'running'
+        user: 'maxscale'
+        passwd: '1a2b3c'
+      writme:
+        router: 'readwritesplit' 
+        servers: 'me'
+        user: 'maxscale'
+        passwd: '1a2b3c'
+    maxscale_listeners:
+      merwsock:
+        service: 'readme Service'
+        socket: '/tmp/maxscale_rw.sock'
+      mereadtcp:
+        service: 'writme Service'
+        address: '0.0.0.0'
+        port: 12345
+    maxscale_monitors:
+      me:
+        module: 'mysqlmon'
+        servers: 'me'
+        user: 'maxscale'
+        passwd: '1a2b3c'
   roles:
+    - mariadb
     - ../../

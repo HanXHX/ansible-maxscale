@@ -1,37 +1,20 @@
 ---
 
-- name: ASSERT | Check Maxscale version
-  assert:
-    that:
-      - "maxscale_version in maxscale_available_version"
-      - "ansible_service_mgr == 'sysvinit'"
-
 - name: INCLUDE | Install
   include: install.yml
-
-- name: INCLUDE | Fix systemd
-  include: fix-systemd.yml
-  when: ansible_service_mgr == 'systemd'
 
 - name: TEMPLATE | Deploy maxcale configuration
   template: >
     src=etc/maxscale.cnf.j2
     dest=/etc/maxscale.cnf
     mode=0640
+    owner=maxscale
   notify: restart maxscale
 
-- name: TEMPLATE | Prepare logrotate
-  template: >
-    src=etc/logrotate.d/maxscale.j2
-    dest=/etc/logrotate.d/maxscale
-
-- name: FILE | Create cache directory
-  file: >
-    path={{ maxscale_cachedir }}
-    owner={{ maxscale_owner }}
-    group={{ maxscale_group }}
-    mode=0755
-    state=directory
+#- name: TEMPLATE | Prepare logrotate
+#  template: >
+#    src=etc/logrotate.d/maxscale.j2
+#    dest=/etc/logrotate.d/maxscale
 
 - name: SERVICE | Ensure Maxscale is enabled and started
   service: name=maxscale state=started enabled=yes

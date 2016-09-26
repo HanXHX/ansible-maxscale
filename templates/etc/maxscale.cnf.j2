@@ -4,8 +4,8 @@
 
 [maxscale]
 threads={{ maxscale_threads }}
-log_messages={{ maxscale_log_messages }}
-log_trace={{ maxscale_log_trace }}
+log_notice={{ maxscale_log_notice }}
+log_info={{ maxscale_log_info }}
 log_debug={{ maxscale_log_debug }}
 logdir={{ maxscale_logdir }}
 cachedir={{ maxscale_cachedir }}
@@ -203,13 +203,13 @@ module=hintfilter
 #
 ## Examples:
 
-[Read Connection Router]
-type=service
-router=readconnroute
-servers=server1,server2,server3
-user=myuser
-passwd=mypwd
-router_options=slave
+#[Read Connection Router]
+#type=service
+#router=readconnroute
+#servers=server1,server2,server3
+#user=myuser
+#passwd=mypwd
+#router_options=slave
 
 # Uncomment this to disable the saving of session modifying comments. Some scripting
 # languages use connection pooling and will use the same session. MaxScale sees them
@@ -220,52 +220,53 @@ router_options=slave
 # MaxScale will only use the master for write queries.
 #router_options=master_accept_reads=true
 
-{% for router in maxscale_rwsplit_routers %}
 # --------------------------------------------------------------------------
-# RW Split Router -> {{ router.name }}
+# Services
 # --------------------------------------------------------------------------
-[{{ router.name }}]
+{% for name, config in maxscale_services.iteritems() %}
+[{{ name }} Service]
 type=service
-router=readwritesplit
-servers={{ router.servers | join(',') }}
-user={{ router.user }}
-passwd={{ router.passwd }}
-max_slave_connections={{ router.max_slave_connections }}
-{% if router.detect_replication_lag is defined %}
-detect_replication_lag={{ router.detect_replication_lag }}
-{% if router.detect_replication_lag == 1 and router.max_slave_replication_lag is defined %}
-max_slave_replication_lag={{ router.max_slave_replication_lag }}
-{% endif %}
-{% endif %}
-options=slave_selection_criteria={{ router.slave_selection_criteria | default('LEAST_CURRENT_OPERATIONS') }}
-master_accept_reads={{ router.master_accept_reads | default('false') }}
-use_sql_variables_in={{ router.use_sql_variables_in | default('master') }}
-{% if router.filters is defined %}
-filters={{ router.filters }}
-{% endif %}
-{% if router.version_string is defined %}
-version_string={{ router.version_string }}
-{% endif %}
-#filters=hint|fetch|qla
-
-
-[{{ router.name }} Listener]
-type=listener
-service={{ router.name }}
-protocol=MySQLClient
-port={{ router.listener_port }}
-address={{ router.listener_address | default('0.0.0.0') }}
-
-[{{ router.name }} Monitor]
-type=monitor
-module=mysqlmon
-servers={{ router.servers | join(',') }}
-user={{ router.user }}
-passwd={{ router.passwd }}
-detect_stale_master=1
-# --------------------------------------------------------------------------
+{% for key, value in config.iteritems() %}
+{{ key }}={{ value }}
+{% endfor %}
 
 {% endfor %}
+# --------------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------------
+# Monitors
+# --------------------------------------------------------------------------
+{% for name, config in maxscale_monitors.iteritems() %}
+[{{ name }} Monitor]
+type=monitor
+{% for key, value in config.iteritems() %}
+{{ key }}={{ value }}
+{% endfor %}
+
+{% endfor %}
+# --------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------
+# Listeners
+# --------------------------------------------------------------------------
+{% for name, config in maxscale_listeners.iteritems() %}
+[{{ name }} Listener]
+type=listener
+protocol=MySQLClient
+service={{ config.service }}
+{% if config.address is defined %}
+address={{ config.address }}
+{% endif %}
+{% if config.port is defined %}
+port={{ config.port }}
+{% endif %}
+{% if config.socket is defined %}
+socket={{ config.socket }}
+{% endif %}
+
+{% endfor %}
+# --------------------------------------------------------------------------
 
 {% if maxscale_debug_listener %}
 # --------------------------------------------------------------------------
@@ -273,8 +274,15 @@ detect_stale_master=1
 type=listener
 service=Debug Interface
 protocol=telnetd
+{% if maxscale_debug_listener_port is not none %}
 port={{ maxscale_debug_listener_port }}
+{% endif %}
+{% if maxscale_debug_listener_address is not none %}
 address={{ maxscale_debug_listener_address }}
+{% endif %}
+{% if maxscale_debug_listener_socket is not none %}
+socket={{ maxscale_debug_listener_socket }}
+{% endif %}
 [Debug Interface]
 type=service
 router=debugcli
@@ -287,9 +295,15 @@ router=debugcli
 type=listener
 service=CLI
 protocol=maxscaled
+{% if maxscale_cli_listener_port is not none %}
 port={{ maxscale_cli_listener_port }}
+{% endif %}
+{% if maxscale_cli_listener_address is not none %}
 address={{ maxscale_cli_listener_address }}
-
+{% endif %}
+{% if maxscale_cli_listener_socket is not none %}
+socket={{ maxscale_cli_listener_socket }}
+{% endif %}
 [CLI]
 type=service
 router=cli

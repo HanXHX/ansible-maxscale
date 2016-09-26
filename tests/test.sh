@@ -3,7 +3,7 @@
 # Thanks to https://servercheck.in/blog/testing-ansible-roles-travis-ci-github
 
 DIR=$( dirname $0 )
-INVENTORY_FILE="$DIR/inventory"
+INVENTORY_FILE="localhost,"
 PLAYBOOK="$DIR/test.yml"
 
 set -ev
