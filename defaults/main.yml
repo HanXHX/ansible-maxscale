@@ -22,9 +22,9 @@ maxscale_cachedir: '/var/cache/maxscale'
 maxscale_piddir: '/var/run/maxscale'
 
 maxscale_servers: []
-maxscale_services: []
-maxscale_listeners: []
-maxscale_monitors: []
+maxscale_services: {}
+maxscale_listeners: {}
+maxscale_monitors: {}
 
 # CLI Listener
 maxscale_cli_listener: true
