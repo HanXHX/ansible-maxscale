@@ -8,7 +8,7 @@ Install and configure MariaDB Maxscale for Debian Jessie.
 Requirements
 ------------
 
-None.
+Maxscale service works only with systemd.
 
 Role Variables
 --------------

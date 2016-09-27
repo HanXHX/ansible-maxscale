@@ -19,3 +19,4 @@
 
 - name: SERVICE | Ensure Maxscale is enabled and started
   service: name=maxscale state=started enabled=yes
+  when: ansible_service_mgr == 'systemd'
