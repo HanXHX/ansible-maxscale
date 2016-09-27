@@ -2,6 +2,8 @@
 
 - name: reload maxscale
   service: name=maxscale state=reloaded
+  when: ansible_service_mgr == 'systemd'
 
 - name: restart maxscale
   service: name=maxscale state=restarted
+  when: ansible_service_mgr == 'systemd'
