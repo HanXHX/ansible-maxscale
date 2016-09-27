@@ -37,6 +37,12 @@
       - mariadb-server
       - galera-3
   
+  - name: SERVICE | Ensure MariaDB is started
+    service: name=mysql state=started
+
+  - name: WAIT_FOR | MariaDB port is available
+    wait_for: port=3306 delay=3 connect_timeout=1 timeout=30
+
   - name: MYSQL_USER | Create maxscale user...
     mysql_user: >
       name="maxscale"
