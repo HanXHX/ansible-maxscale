@@ -47,6 +47,7 @@
           shell: ps aux | grep -q ^maxscale
           register: ps
           failed_when: false
+          changed_when: false
         - name: TEST ---- Start Maxscale (when init is not systemd)
           command: /usr/bin/maxscale --user=maxscale
           when: ps.rc == 1
