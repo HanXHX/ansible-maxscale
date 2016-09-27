@@ -1,6 +1,5 @@
 ---
 
-maxscale_version: 'latest'
 maxscale_threads: '{{ ansible_processor_vcpus }}'
 maxscale_log_notice: 1
 maxscale_log_info: 0
