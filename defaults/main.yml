@@ -10,6 +10,8 @@ maxscale_cachedir: '/var/cache/maxscale'
 maxscale_piddir: '/var/run/maxscale'
 #maxscale_language
 
+maxscale_logrotate: true
+
 maxscale_servers: []
 maxscale_services: []
 maxscale_listeners: []

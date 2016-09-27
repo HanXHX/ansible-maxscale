@@ -11,10 +11,11 @@
     owner=maxscale
   notify: restart maxscale
 
-#- name: TEMPLATE | Prepare logrotate
-#  template: >
-#    src=etc/logrotate.d/maxscale.j2
-#    dest=/etc/logrotate.d/maxscale
+- name: TEMPLATE | Prepare logrotate
+  template: >
+    src=etc/logrotate.d/maxscale.j2
+    dest=/etc/logrotate.d/maxscale
+  when: maxscale_logrotate
 
 - name: SERVICE | Ensure Maxscale is enabled and started
   service: name=maxscale state=started enabled=yes
