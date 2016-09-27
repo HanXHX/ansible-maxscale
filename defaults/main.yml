@@ -2,9 +2,16 @@
 # -----------------------
 # Install
 # -----------------------
+
+# Install from repository
+maxscale_version: '2.0.0'
+maxscale_mariadb_token: null
+
+# Install from deb file
 maxscale_deb: 'https://downloads.mariadb.com/MaxScale/2.0.0/debian/dists/jessie/main/binary-amd64/maxscale-beta-2.0.0-1.debian.jessie.x86_64.deb'
-# Force check package (set false to speedup playbook, but set true if you need upgrade)
 maxscale_force_install_deb: false
+
+# Configure logrotate
 maxscale_logrotate: true
 
 # -----------------------
