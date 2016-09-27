@@ -1,5 +1,6 @@
 ---
 
+maxscale_deb: 'https://downloads.mariadb.com/MaxScale/2.0.0/debian/dists/jessie/main/binary-amd64/maxscale-beta-2.0.0-1.debian.jessie.x86_64.deb'
 maxscale_threads: '{{ ansible_processor_vcpus }}'
 maxscale_log_notice: 1
 maxscale_log_info: 0

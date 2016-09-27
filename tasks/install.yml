@@ -15,6 +15,6 @@
 
 - name: APT | Install Maxscale from deb package
   apt: >
-    deb=https://downloads.mariadb.com/MaxScale/2.0.0/debian/dists/jessie/main/binary-amd64/maxscale-beta-2.0.0-1.debian.jessie.x86_64.deb
+    deb={{ maxscale_deb }}
     update_cache=yes
     cache_valid_time=3600
