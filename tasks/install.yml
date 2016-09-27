@@ -1,35 +1,17 @@
 ---
 
-- block:
+- name: APT | Install apt-transport-https
+  apt: pkg=apt-transport-https update_cache=yes cache_valid_time=3600
 
-  - name: APT_KEY | Add MariaDB GPG key
-    apt_key: >
-      url=http://downloads.mariadb.com/enterprise/{{ maxscale_mariadb_token }}/mariadb-maxscale/MariaDB-MaxScale-GPG-KEY
-      state=present
+- name: APT_KEY | Add MariaDB GPG key
+  apt_key: >
+    url=https://downloads.mariadb.com/MaxScale/MariaDB-MaxScale-GPG-KEY
+    state=present
 
-  - name: APT_REPOSITORY | Add MariaDB Maxscale repo
-    apt_repository: >
-      repo='deb http://downloads.mariadb.com/enterprise/{{ maxscale_mariadb_token }}/mariadb-maxscale/{{ maxscale_version }}/debian {{ ansible_distribution_release }} main'
-      state=present
+- name: APT_REPOSITORY | Add MariaDB Maxscale repo
+  apt_repository: >
+    repo='deb https://downloads.mariadb.com/MaxScale/{{ maxscale_version }}/debian {{ ansible_distribution_release }} main'
+    state=present
 
-  - name: APT | Install Maxscale
-    apt: pkg=maxscale state=present update_cache=yes cache_valid_time=3600
-
-  when: maxscale_mariadb_token is not none
-
-- block:
-
-  - name: SHELL | Check if maxscale installed
-    shell: dpkg -l maxscale | grep '^ii'
-    changed_when: false
-    failed_when: false
-    register: dpkg
-
-  - name: APT | Install Maxscale from deb package
-    apt: >
-      deb={{ maxscale_deb }}
-      update_cache=yes
-      cache_valid_time=3600
-    when: dpkg.rc == 1 or maxscale_force_install_deb
-
-  when: maxscale_mariadb_token is none
+- name: APT | Install Maxscale from deb package
+  apt: pkg=maxscale state=present
