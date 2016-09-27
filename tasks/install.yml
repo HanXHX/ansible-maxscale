@@ -13,8 +13,15 @@
 #- name: APT | Install Maxscale
 #  apt: pkg=maxscale state=present update_cache=yes cache_valid_time=3600
 
+- name: SHELL | Check if maxscale installed
+  shell: dpkg -l maxscale | grep '^ii'
+  changed_when: false
+  failed_when: false
+  register: dpkg
+
 - name: APT | Install Maxscale from deb package
   apt: >
     deb={{ maxscale_deb }}
     update_cache=yes
     cache_valid_time=3600
+  when: dpkg.rc == 1 or maxscale_force_install_deb

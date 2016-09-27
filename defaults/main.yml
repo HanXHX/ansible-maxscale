@@ -1,6 +1,15 @@
 ---
-
+# -----------------------
+# Install
+# -----------------------
 maxscale_deb: 'https://downloads.mariadb.com/MaxScale/2.0.0/debian/dists/jessie/main/binary-amd64/maxscale-beta-2.0.0-1.debian.jessie.x86_64.deb'
+# Force check package (set false to speedup playbook, but set true if you need upgrade)
+maxscale_force_install_deb: false
+maxscale_logrotate: true
+
+# -----------------------
+# Global
+# -----------------------
 maxscale_threads: '{{ ansible_processor_vcpus }}'
 maxscale_log_notice: 1
 maxscale_log_info: 0
@@ -8,9 +17,6 @@ maxscale_log_debug: 0
 maxscale_logdir: '/var/log/maxscale'
 maxscale_cachedir: '/var/cache/maxscale'
 maxscale_piddir: '/var/run/maxscale'
-#maxscale_language
-
-maxscale_logrotate: true
 
 maxscale_servers: []
 maxscale_services: []
