@@ -9,7 +9,7 @@
     dest=/etc/maxscale.cnf
     mode=0640
     owner=maxscale
-  notify: reload maxscale
+  notify: restart maxscale
 
 - name: TEMPLATE | Prepare logrotate
   template: >
