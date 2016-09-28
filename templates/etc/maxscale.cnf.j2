@@ -116,12 +116,6 @@ router=debugcli
 type=listener
 service=CLI
 protocol=maxscaled
-{% if maxscale_cli_listener_port is not none %}
-port={{ maxscale_cli_listener_port }}
-{% endif %}
-{% if maxscale_cli_listener_address is not none %}
-address={{ maxscale_cli_listener_address }}
-{% endif %}
 {% if maxscale_cli_listener_socket is not none %}
 socket={{ maxscale_cli_listener_socket }}
 {% endif %}
