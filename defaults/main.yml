@@ -5,7 +5,7 @@
 # -----------------------
 
 # Install from repository
-maxscale_version: '2.0.0'
+maxscale_version: '2.0.1'
 
 # Configure logrotate
 maxscale_logrotate: true
