@@ -38,23 +38,14 @@
         servers: 'me'
         user: 'maxscale'
         passwd: '1a2b3c'
+  pre_tasks:
+    - name: INCLUDE | Install sysvinit
+      include: includes/sysvinit.yml
+      when: __init == "sysvinit"
   roles:
     - mariadb
     - ../../
   post_tasks:
-    - block:
-        - name: TEST ---- Check if maxscale is started
-          shell: ps aux | grep -q ^maxscale
-          register: ps
-          failed_when: false
-          changed_when: false
-        - name: TEST ---- Start Maxscale (when init is not systemd)
-          command: /usr/bin/maxscale --user=maxscale
-          when: ps.rc == 1
-        - name: TEST ---- Pause 1 sec
-          pause: seconds=1
-          when: ps.rc == 1
-      when: ansible_service_mgr != 'systemd'
     - name: TEST ---- maxadmin
       command: maxadmin 'list listeners'
       changed_when: false
