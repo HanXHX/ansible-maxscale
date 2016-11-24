@@ -5,50 +5,48 @@
   register: mysql_exists
   changed_when: false
 
-- block: 
+- name: TEMPLATE Create .my.cnf for root
+  template: src=my.cnf dest=/root/.my.cnf owner=root group=root mode=0600
 
-  - name: TEMPLATE Create .my.cnf for root
-    template: src=my.cnf dest=/root/.my.cnf owner=root group=root mode=0600
-  
-  - name: APT | Install MariaDB key
-    apt_key: keyserver="keyserver.ubuntu.com" id="0xcbcb082a1bb943db" state=present
-  
-  - name: APT | Add MariaDB repository
-    apt_repository: repo='deb {{ mariadb_repository }} {{ ansible_distribution_release }} main' state=present
-  
-  - name: APT | Add MariaDB (src) repository
-    apt_repository: repo='deb-src {{ mariadb_repository }} {{ ansible_distribution_release }} main' state=present
-  
-  - name: SHELL | Get MariaDB target version
-    shell: LANG=C apt-cache depends mariadb-server | awk -F '-' '/Depends/ { print $NF }'
-    register: apt_mariadb_version
-    changed_when: false
-  
-  - name: DEBCONF | Prepare MariaDB silent installation (root password)
-    debconf: name='mariadb-server-{{ apt_mariadb_version.stdout }}' question='mysql-server/root_password' vtype='password' value='{{ mysql_root_password }}'
-  
-  - name: DEBCONF | Prepare MariaDB silent installation (root password again)
-    debconf: name='mariadb-server-{{ apt_mariadb_version.stdout }}' question='mysql-server/root_password_again' vtype='password' value='{{ mysql_root_password }}'
-  
-  - name: APT | Install packages 
-    apt: pkg={{ item }} state=present
-    with_items:
-      - python-mysqldb
-      - mariadb-server
-      - galera-3
-  
-  - name: SERVICE | Ensure MariaDB is started
-    service: name=mysql state=started
+- name: APT | Install MariaDB key
+  apt_key: keyserver="keyserver.ubuntu.com" id="0xcbcb082a1bb943db" state=present
 
-  - name: WAIT_FOR | MariaDB port is available
-    wait_for: port=3306 delay=3 connect_timeout=1 timeout=30
+- name: APT | Add MariaDB repository
+  apt_repository: repo='deb {{ mariadb_repository }} {{ ansible_distribution_release }} main' state=present
 
-  - name: MYSQL_USER | Create maxscale user...
-    mysql_user: >
-      name="maxscale"
-      password="1a2b3c"
-      priv='mysql.user:SELECT/mysql.db:SELECT/mysql.tables_priv:SELECT/*.*:SHOW DATABASES,REPLICATION CLIENT'
-      host="%"
-    changed_when: false
+- name: APT | Add MariaDB (src) repository
+  apt_repository: repo='deb-src {{ mariadb_repository }} {{ ansible_distribution_release }} main' state=present
 
-  when: not mysql_exists.stat.exists
+- name: SHELL | Get MariaDB target version
+  shell: LANG=C apt-cache depends mariadb-server | awk -F '-' '/Depends/ { print $NF }'
+  register: apt_mariadb_version
+  changed_when: false
+
+- name: DEBCONF | Prepare MariaDB silent installation (root password)
+  debconf: name='mariadb-server-{{ apt_mariadb_version.stdout }}' question='mysql-server/root_password' vtype='password' value='{{ mysql_root_password }}'
+  changed_when: not mysql_exists.stat.exists
+
+- name: DEBCONF | Prepare MariaDB silent installation (root password again)
+  debconf: name='mariadb-server-{{ apt_mariadb_version.stdout }}' question='mysql-server/root_password_again' vtype='password' value='{{ mysql_root_password }}'
+  changed_when: not mysql_exists.stat.exists
+
+- name: APT | Install packages
+  apt: pkg={{ item }} state=present
+  with_items:
+    - python-mysqldb
+    - mariadb-server
+    - galera-3
+
+- name: SERVICE | Ensure MariaDB is started
+  service: name=mysql state=started
+
+- name: WAIT_FOR | MariaDB port is available
+  wait_for: port=3306 delay=3 connect_timeout=1 timeout=30
+
+- name: MYSQL_USER | Create maxscale user...
+  mysql_user: >
+    name="maxscale"
+    password="1a2b3c"
+    priv='mysql.user:SELECT/mysql.db:SELECT/mysql.tables_priv:SELECT/*.*:SHOW DATABASES,REPLICATION CLIENT'
+    host="%"
+  changed_when: false
