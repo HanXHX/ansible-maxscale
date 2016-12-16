@@ -2,6 +2,7 @@
 
 - hosts: all
   vars:
+    __init: "not_setted"
     maxscale_log_notice: 1
     maxscale_log_info: 1
     maxscale_log_debug: 1
