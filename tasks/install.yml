@@ -4,9 +4,15 @@
   apt: pkg=apt-transport-https update_cache=yes cache_valid_time=3600
 
 - name: APT_KEY | Add MariaDB GPG key
-  apt_key: >
-    url=https://downloads.mariadb.com/MaxScale/MariaDB-MaxScale-GPG-KEY
-    state=present
+  apt_key:
+    id: "{{ item }}"
+    keyserver: "keyserver.ubuntu.com"
+  with_items:
+    - "0x8167ee24"
+    - "0xe3c94f49"
+    - "0xcbcb082a1bb943db"
+    - "0xf1656f24c74cd1d8"
+    - "0x135659e928c12247"
 
 - name: APT_REPOSITORY | Add MariaDB Maxscale repo
   apt_repository: >
