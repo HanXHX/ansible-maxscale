@@ -32,5 +32,9 @@
   become: false
   when: sysv_installed.changed
 
+- name: SETUP
+  action: setup
+  when: sysv_installed.changed
+
 - name: APT | Purge systemd
   apt: pkg=systemd state=absent purge=yes
