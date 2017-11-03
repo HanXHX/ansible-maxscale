@@ -8,14 +8,15 @@
 - name: TEMPLATE Create .my.cnf for root
   template: src=my.cnf dest=/root/.my.cnf owner=root group=root mode=0600
 
-- name: APT | Install MariaDB key
+- name: APT | Install GPG
+  apt:
+    pkg: gnupg
+
+- name: APT_KEY | Install MariaDB key
   apt_key: keyserver="keyserver.ubuntu.com" id="0xcbcb082a1bb943db" state=present
 
-- name: APT | Add MariaDB repository
+- name: APT_REPOSITORY | Add MariaDB repository
   apt_repository: repo='deb {{ mariadb_repository }} {{ ansible_distribution_release }} main' state=present
-
-- name: APT | Add MariaDB (src) repository
-  apt_repository: repo='deb-src {{ mariadb_repository }} {{ ansible_distribution_release }} main' state=present
 
 - name: SHELL | Get MariaDB target version
   shell: LANG=C apt-cache depends mariadb-server | awk -F '-' '/Depends/ { print $NF }'
