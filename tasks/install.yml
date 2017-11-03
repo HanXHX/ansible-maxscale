@@ -15,3 +15,9 @@
 
 - name: APT | Install Maxscale from deb package
   apt: pkg=maxscale state=present
+
+- name: COMMAND | Deploy init script
+  command: cp /usr/share/maxscale/maxscale /etc/init.d/maxscale
+  args:
+    creates: /etc/init.d/maxscale
+  when: ansible_service_mgr == 'sshd'
