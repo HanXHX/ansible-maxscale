@@ -3,7 +3,7 @@ MariaDB Maxscale Ansible role
 
 [![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-HanXHX.maxscale-blue.svg)](https://galaxy.ansible.com/HanXHX/maxscale/) [![Build Status](https://travis-ci.org/HanXHX/ansible-maxscale.svg?branch=master)](https://travis-ci.org/HanXHX/ansible-maxscale)
 
-Install and configure MariaDB Maxscale for Debian Jessie.
+Install and configure MariaDB Maxscale for Debian Jessie/Stretch.
 
 Requirements
 ------------
