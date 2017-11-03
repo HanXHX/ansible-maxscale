@@ -14,7 +14,8 @@ piddir={{ maxscale_piddir }}
 [qla]
 type=filter
 module=qlafilter
-options=/tmp/QueryLog
+options=case,extended
+filebase=/tmp/SqlQueryLog
 
 [fetch]
 type=filter
