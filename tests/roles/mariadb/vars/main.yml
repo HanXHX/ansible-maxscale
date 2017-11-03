@@ -1,5 +1,5 @@
 ---
 
 mariadb_version: '10.1'
-mariadb_repository: "http://ftp.igh.cnrs.fr/pub/mariadb/repo/{{ mariadb_version }}/debian"
+mariadb_repository: "http://mariadb.mirrors.ovh.net/MariaDB/repo/{{ mariadb_version }}/debian"
 mysql_root_password: '1a2b3c'
